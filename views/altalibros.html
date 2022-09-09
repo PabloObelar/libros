@@ -1,0 +1,31 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Alta libro</h1>
+    <form method="POST">
+      <input
+        type="text"
+        name="titulo"
+        placeholder="Titulo del libro"
+        required
+      />
+      <input type="text" name="autor" placeholder="Autor" required />
+      <input
+        type="number"
+        name="year"
+        placeholder="Año de lanzamiento"
+        required
+      />
+      <input type="text" name="pais" placeholder="Pais de origen" required />
+      <input type="text" name="editorial" placeholder="Editorial" required />
+      <input type="submit" value="Guardar" />
+    </form>
+    <p>{{mensaje}}</p>
+    <h3><a href="/login">Volver al menu principal</a></h3>
+  </body>
+</html>

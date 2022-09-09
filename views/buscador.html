@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buscador de libros</title>
+  </head>
+  <body>
+    <form action="/buscador" method="get">
+      <input
+        type="search"
+        placeholder="Escribe el titulo"
+        name="busqueda"
+        required
+      />
+      <input type="submit" value="Buscar" />
+    </form>
+    {% if busqueda.length >0 %}
+    <h1>
+      Resultados de busqueda de libros para el termino :
+      <strong>{{busqueda}}</strong>
+    </h1>
+    <ul>
+      {% for p in libros%}
+      <li><a href="/titulo/{{p.titulo}}">{{p.titulo}}</a></li>
+      {% endfor %}
+    </ul>
+    <p>Encontrados: {{libros.length}}</p>
+    {% endif %} {% if libros.length == 0 %}
+    <h2>No se han encontrado resultados</h2>
+    {% endif%}
+    <h3><a href="/login">Menu principal</a></h3>
+  </body>
+</html>
