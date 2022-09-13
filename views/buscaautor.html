@@ -16,19 +16,20 @@
       />
       <input type="submit" value="Buscar" />
     </form>
-    {% if busqueda.length > 0 %}
+    {% if busqueda.length >0 %}
     <h1>
-      Resultados de busqueda del autor para el termino :
+      Resultados de busqueda de libros para el termino :
       <strong>{{busqueda}}</strong>
     </h1>
     <ul>
-      { % for p in autor % }
-      <p>{{p.autor}} - Libro : {{p.titulo}}</p>
-      { % endfor %}
+      {% for p in autor%}
+      <li><a href="/titulo/{{p.titulo}}">{{p.titulo}}</a></li>
+      {% endfor %}
     </ul>
-    {% endif %} {% if autor.length == 0 %}
+    <p>Encontrados: {{libros.length}}</p>
+    {% endif %} {% if libros.length == 0 %}
     <h2>No se han encontrado resultados</h2>
-    {%endif%}
+    {% endif%}
     <h3><a href="/login">Menu principal</a></h3>
   </body>
 </html>

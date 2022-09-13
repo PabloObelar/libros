@@ -128,18 +128,19 @@ app.all("/altalibros", (req, res) => {
     res.render("altalibros.html");
   }
 });
-app.all("/altausuario.html", (req, res) => {
+/*app.all("/altausuario", (req, res) => {
   if (req.body.user) {
     MongoClient.connect(MONGO_URL, { useUnifiedTopology: true }, (err, db) => {
       const dbo = db.db(dbdata.db);
-      var d = new Date();
-      var n = d.getTime();
+      let d = new Date();
+      let n = d.getTime();
       dbo
         .collection(dbdata.user)
-        .findOne({ level: { $lte: 3 } }, (err, user) => {
+        .findOne({ level: { $lte: 5 } }, (err, user) => {
+          console.log(user);
           if (user) {
             res.send(
-              `No tienes el nivel dar de alta </br><p><a href="/">Inicia sesión en otro cuenta</a></p>`
+              `No tenes el nivel necesario </br> <p><a href="/">Inicia sesion en otra cuenta</a></p>`
             );
           } else {
             dbo
@@ -147,7 +148,7 @@ app.all("/altausuario.html", (req, res) => {
               .findOne({ user: req.body.user }, (err, user) => {
                 if (user) {
                   res.send(
-                    `El usuario ya exites </br><p><a href="/altausuario">Volver al menú anterior</a></p>`
+                    `El usuario ya existe </br><p><a href="/altausuario">Volver al menu anterior</a></p>`
                   );
                 } else {
                   dbo.collection(dbdata.user).insertOne(
@@ -169,15 +170,64 @@ app.all("/altausuario.html", (req, res) => {
           }
         });
     });
+  } else {
+    res.render("altausuario.html");
   }
 });
-app.all("/titulo:titulo", (req, res) => {
+*/
+app.all("/altausuario", (req, res) => {
+  if (req.body.user) {
+    MongoClient.connect(MONGO_URL, { useUnifiedTopology: true }, (err, db) => {
+      const dbo = db.db(dbdata.db);
+      let d = new Date();
+      let n = d.getTime();
+      dbo
+        .collection(dbdata.user)
+        .findOne({ level: { $lte: 3 } }, (err, user) => {
+          if (user) {
+            //console.log(user);
+            res.send(
+              `No tienes el nivel para dar de alta </br> <p><a href="/">Incia sesión en otra cuenta</a></p>`
+            );
+          } else {
+            dbo
+              .collection(dbdata.user)
+              .findOne({ user: req.body.user }, (err, user) => {
+                if (user) {
+                  res.send(
+                    `El usuario ya existe </br> <p><a href="/altausuario">Volver al menu anterior</a></p>`
+                  );
+                } else {
+                  dbo.collection(dbdata.user).insertOne(
+                    {
+                      user: req.body.user,
+                      password: sha256(req.body.password),
+                      level: parseInt(req.body.level),
+                      id: parseInt(n),
+                    },
+                    function (err, res) {
+                      db.close();
+                    }
+                  );
+                  res.render("altausuario.html", {
+                    mensaje: "Alta exitosa de " + req.body.user,
+                  });
+                }
+              });
+          }
+        });
+    });
+  } else {
+    res.render("altausuario.html");
+  }
+});
+app.all("/titulo/:titulo", (req, res) => {
   MongoClient.connect(MONGO_URL, { useUnifiedTopology: true }, (err, db) => {
     const dbo = db.db(dbdata.db);
-    let titulo = req.params.titulo;
-    //console.log(titulo)
+    var titulo = req.params.titulo;
+    //console.log(titulo);
     dbo.collection(dbdata.book).findOne({ titulo: titulo }, (err, libro) => {
-      //console.log(libro)
+      //console.log(libro);
       if (libro) {
         res.render("libro.html", { libro: libro });
       } else {
