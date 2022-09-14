@@ -175,7 +175,9 @@ app.all("/altalibros", (req, res) => {
   }
 });
 */
+/*
 app.all("/altausuario", (req, res) => {
+  console.log("user");
   if (req.body.user) {
     MongoClient.connect(MONGO_URL, { useUnifiedTopology: true }, (err, db) => {
       const dbo = db.db(dbdata.db);
@@ -184,8 +186,9 @@ app.all("/altausuario", (req, res) => {
       dbo
         .collection(dbdata.user)
         .findOne({ level: { $lte: 3 } }, (err, user) => {
+          console.log("user");
           if (user) {
-            //console.log(user);
+            console.log(user);
             res.send(
               `No tienes el nivel para dar de alta </br> <p><a href="/">Incia sesión en otra cuenta</a></p>`
             );
@@ -216,6 +219,32 @@ app.all("/altausuario", (req, res) => {
               });
           }
         });
+    });
+  } else {
+    res.render("altausuario.html");
+  }
+});
+*/
+app.all("/altausuario", (req, res) => {
+  if (req.body.user) {
+    MongoClient.connect(MONGO_URL, { useUnifiedTopology: true }, (err, db) => {
+      const dbo = db.db(dbdata.db);
+      let d = new Date();
+      let n = d.getTime();
+      dbo.collection(dbdata.user).insertOne(
+        {
+          user: req.body.user,
+          password: sha256(req.body.password),
+
+          id: parseInt(n),
+        },
+        function (err, res) {
+          db.close();
+        }
+      );
+      res.render("altausuario.html", {
+        mensaje: "Alta exitosa de " + req.body.user,
+      });
     });
   } else {
     res.render("altausuario.html");
